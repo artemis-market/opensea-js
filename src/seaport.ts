@@ -4281,7 +4281,6 @@ export class OpenSeaPort {
         order: sell,
         accountAddress,
       });
-      shouldValidateSell = false;
     } else if (buy.maker.toLowerCase() == accountAddress.toLowerCase()) {
       // USER IS THE BUYER, only validate the sell order
       await this._buyOrderValidationAndApprovals({
@@ -4289,7 +4288,6 @@ export class OpenSeaPort {
         counterOrder: sell,
         accountAddress,
       });
-      shouldValidateBuy = false;
 
       // If using ETH to pay, set the value of the transaction to the current price
       if (buy.paymentToken == NULL_ADDRESS) {
@@ -4298,14 +4296,6 @@ export class OpenSeaPort {
     } else {
       // User is neither - matching service
     }
-
-    // await this._validateMatch({
-    //   buy,
-    //   sell,
-    //   accountAddress,
-    //   shouldValidateBuy,
-    //   shouldValidateSell,
-    // });
 
     this._dispatch(EventType.MatchOrders, {
       buy,
