@@ -1217,15 +1217,22 @@ export class OpenSeaPort {
     recipientAddress?: string;
     referrerAddress?: string;
   }): Promise<any> {
+    console.log("SEAPORT: 1");
     const matchingOrder = this._makeMatchingOrder({
       order,
       accountAddress,
       recipientAddress: recipientAddress || accountAddress,
     });
 
+    console.log("SEAPORT: 2");
+
     const { buy, sell } = assignOrdersToSides(order, matchingOrder);
 
+    console.log("SEAPORT: 3");
+
     const metadata = this._getMetadata(order, referrerAddress);
+
+    console.log("SEAPORT: 4");
     const response = await this._prepareAtomicMatch({
       buy,
       sell,
@@ -4277,17 +4284,17 @@ export class OpenSeaPort {
     // Only check buy, but shouldn't matter as they should always be equal
     if (sell.maker.toLowerCase() == accountAddress.toLowerCase()) {
       // USER IS THE SELLER, only validate the buy order
-      await this._sellOrderValidationAndApprovals({
-        order: sell,
-        accountAddress,
-      });
+      // await this._sellOrderValidationAndApprovals({
+      //   order: sell,
+      //   accountAddress,
+      // });
     } else if (buy.maker.toLowerCase() == accountAddress.toLowerCase()) {
       // USER IS THE BUYER, only validate the sell order
-      await this._buyOrderValidationAndApprovals({
-        order: buy,
-        counterOrder: sell,
-        accountAddress,
-      });
+      // await this._buyOrderValidationAndApprovals({
+      //   order: buy,
+      //   counterOrder: sell,
+      //   accountAddress,
+      // });
 
       // If using ETH to pay, set the value of the transaction to the current price
       if (buy.paymentToken == NULL_ADDRESS) {
@@ -4297,12 +4304,12 @@ export class OpenSeaPort {
       // User is neither - matching service
     }
 
-    this._dispatch(EventType.MatchOrders, {
-      buy,
-      sell,
-      accountAddress,
-      matchMetadata: metadata,
-    });
+    // this._dispatch(EventType.MatchOrders, {
+    //   buy,
+    //   sell,
+    //   accountAddress,
+    //   matchMetadata: metadata,
+    // });
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const txnData: any = { from: accountAddress, value };
